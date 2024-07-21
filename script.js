@@ -1,3 +1,5 @@
+const GITHUB_TOKEN = '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';
+
 document.getElementById('repoForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     
@@ -32,11 +34,18 @@ document.getElementById('repoForm').addEventListener('submit', async function(ev
 async function fetchAllScripts(owner, repo, branch, path = '') {
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents${path ? '/' + path : ''}?ref=${branch}`;
     console.log(`Fetching from URL: ${apiUrl}`);
-    let response = await fetch(apiUrl);
+    
+    let response = await fetch(apiUrl, {
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
+    });
+
     if (!response.ok) {
         console.error('Failed to fetch contents:', response.statusText);
         throw new Error(`Failed to fetch contents from ${apiUrl}`);
     }
+
     let files = await response.json();
     
     let scriptsContent = [];
@@ -60,7 +69,10 @@ async function fetchAllScripts(owner, repo, branch, path = '') {
 
 async function fetchFileContent(url) {
     const response = await fetch(url, {
-        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+        headers: { 
+            'Accept': 'application/vnd.github.v3.raw',
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
     });
 
     if (!response.ok) {
