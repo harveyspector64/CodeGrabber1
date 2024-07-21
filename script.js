@@ -41,6 +41,8 @@ async function fetchAllScripts(owner, repo, branch, path = '') {
         }
     });
 
+    console.log('Response:', response);
+    
     if (!response.ok) {
         console.error('Failed to fetch contents:', response.statusText, response);
         throw new Error(`Failed to fetch contents from ${apiUrl}`);
@@ -76,6 +78,8 @@ async function fetchFileContent(url) {
         }
     });
 
+    console.log('File content response:', response);
+    
     if (!response.ok) {
         throw new Error(`Failed to fetch file content from ${url}`);
     }
