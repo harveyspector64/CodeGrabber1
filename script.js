@@ -32,7 +32,7 @@ async function fetchAllScripts(owner, repo, path = '') {
         fileTree += `${' '.repeat(path.split('/').length * 2)}- ${file.name}\n`;
         
         if (file.type === 'file' && (file.name.endsWith('.js') || file.name.endsWith('.html') || file.name.endsWith('.css'))) {
-            let content = await fetch(file.download_url).then(res => res.text());
+            let content = await fetchFileContent(file.url);
             scriptsContent.push(`/* ${file.path} */\n\n${content}`);
         } else if (file.type === 'dir') {
             let { scriptsContent: dirScripts, fileTree: dirTree } = await fetchAllScripts(owner, repo, file.path);
@@ -42,6 +42,19 @@ async function fetchAllScripts(owner, repo, path = '') {
     }
     
     return { scriptsContent, fileTree };
+}
+
+async function fetchFileContent(url) {
+    const response = await fetch(url, {
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch file content from ${url}`);
+    }
+
+    const content = await response.text();
+    return content;
 }
 
 function downloadFile(content, filename) {
