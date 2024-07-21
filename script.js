@@ -2,15 +2,13 @@ document.getElementById('zipForm').addEventListener('submit', async function(eve
     event.preventDefault();
     
     const fileInput = document.getElementById('zipFile');
-    const repoNameInput = document.getElementById('repoName').value.trim();
-    const branchNameInput = document.getElementById('branchName').value.trim();
-
     if (fileInput.files.length === 0) {
         alert('Please upload a ZIP file.');
         return;
     }
 
     const zipFile = fileInput.files[0];
+    const zipFileName = zipFile.name.replace('.zip', '');  // Remove .zip extension for filename
     document.getElementById('loading').style.display = 'block';
     document.getElementById('downloadLink').style.display = 'none';
 
@@ -30,7 +28,7 @@ document.getElementById('zipForm').addEventListener('submit', async function(eve
         }
 
         const combinedContent = `/*\nFile Tree:\n\n${fileTree}\n*/\n\n${scriptsContent.join('\n\n')}`;
-        const filename = `${repoNameInput}-${branchNameInput}-combined_scripts.txt`;
+        const filename = `${zipFileName}-combined_scripts.txt`;
         downloadFile(combinedContent, filename);
     } catch (error) {
         console.error('Error processing ZIP file:', error);
