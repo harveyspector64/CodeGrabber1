@@ -11,6 +11,9 @@ document.getElementById('repoForm').addEventListener('submit', async function(ev
 
     const owner = repoParts[1];
     const repo = repoParts[2];
+    
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('downloadLink').style.display = 'none';
 
     try {
         const { scriptsContent, fileTree } = await fetchAllScripts(owner, repo, branchName);
@@ -20,6 +23,8 @@ document.getElementById('repoForm').addEventListener('submit', async function(ev
     } catch (error) {
         console.error('Error fetching scripts:', error);
         alert('Failed to fetch scripts from the repository.');
+    } finally {
+        document.getElementById('loading').style.display = 'none';
     }
 });
 
