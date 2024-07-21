@@ -4,25 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub Repo Script Combiner</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>GitHub Repo Script Combiner</h1>
-        <form id="repoForm">
-            <div class="form-group">
-                <label for="repoUrl">GitHub Repository URL:</label>
-                <input type="text" id="repoUrl" name="repoUrl" required>
-            </div>
-            <div class="form-group">
-                <label for="branchName">Branch Name:</label>
-                <input type="text" id="branchName" name="branchName" required value="main">
-            </div>
-            <button type="submit">Combine Scripts</button>
-        </form>
-        <div id="loading" style="display:none;">Processing...</div>
-        <a id="downloadLink" style="display:none;">Download Combined Scripts</a>
-    </div>
+    <h1>GitHub Repo Script Combiner</h1>
+    <form id="repoForm">
+        <label for="repoUrl">GitHub Repository URL:</label>
+        <input type="text" id="repoUrl" name="repoUrl" required>
+        <label for="branchName">Branch Name:</label>
+        <input type="text" id="branchName" name="branchName" required value="main">
+        <button type="submit">Combine Scripts</button>
+    </form>
+    <a id="downloadLink" style="display:none;">Download Combined Scripts</a>
 
     <script src="script.js"></script>
 </body>
