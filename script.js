@@ -1,4 +1,4 @@
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = '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';
 
 document.getElementById('repoForm').addEventListener('submit', async function(event) {
     event.preventDefault();
@@ -42,7 +42,7 @@ async function fetchAllScripts(owner, repo, branch, path = '') {
     });
 
     if (!response.ok) {
-        console.error('Failed to fetch contents:', response.statusText);
+        console.error('Failed to fetch contents:', response.statusText, response);
         throw new Error(`Failed to fetch contents from ${apiUrl}`);
     }
 
