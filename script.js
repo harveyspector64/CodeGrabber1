@@ -1,4 +1,4 @@
-const GITHUB_TOKEN = 'your_personal_access_token_here';
+const GITHUB_TOKEN = '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';
 
 document.getElementById('repoForm').addEventListener('submit', async function(event) {
     event.preventDefault();
