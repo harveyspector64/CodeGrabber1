@@ -1,3 +1,5 @@
+const GITHUB_TOKEN = 'your_personal_access_token_here';
+
 document.getElementById('repoForm').addEventListener('submit', async function(event) {
     event.preventDefault();
     
@@ -11,8 +13,12 @@ document.getElementById('repoForm').addEventListener('submit', async function(ev
 
     const owner = repoParts[1];
     const repo = repoParts[2];
+    
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('downloadLink').style.display = 'none';
 
     try {
+        console.log(`Fetching scripts from repo: ${owner}/${repo} on branch: ${branchName}`);
         const { scriptsContent, fileTree } = await fetchAllScripts(owner, repo, branchName);
         const combinedContent = `/*\nFile Tree:\n\n${fileTree}\n*/\n\n${scriptsContent.join('\n\n')}`;
         const filename = `${repo}-${branchName}-combined_scripts.txt`;
@@ -20,12 +26,27 @@ document.getElementById('repoForm').addEventListener('submit', async function(ev
     } catch (error) {
         console.error('Error fetching scripts:', error);
         alert('Failed to fetch scripts from the repository.');
+    } finally {
+        document.getElementById('loading').style.display = 'none';
     }
 });
 
 async function fetchAllScripts(owner, repo, branch, path = '') {
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents${path ? '/' + path : ''}?ref=${branch}`;
-    let files = await fetch(apiUrl).then(res => res.json());
+    console.log(`Fetching from URL: ${apiUrl}`);
+    
+    let response = await fetch(apiUrl, {
+        headers: {
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
+    });
+
+    if (!response.ok) {
+        console.error('Failed to fetch contents:', response.statusText);
+        throw new Error(`Failed to fetch contents from ${apiUrl}`);
+    }
+
+    let files = await response.json();
     
     let scriptsContent = [];
     let fileTree = '';
@@ -47,8 +68,12 @@ async function fetchAllScripts(owner, repo, branch, path = '') {
 }
 
 async function fetchFileContent(url) {
+    console.log(`Fetching file content from URL: ${url}`);
     const response = await fetch(url, {
-        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+        headers: { 
+            'Accept': 'application/vnd.github.v3.raw',
+            'Authorization': `token ${GITHUB_TOKEN}`
+        }
     });
 
     if (!response.ok) {
